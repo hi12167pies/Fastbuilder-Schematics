@@ -1,0 +1,9 @@
+name: FastbuilderSchematics
+main: cf.pies.FastbuilderSchematics.Main
+version: 1.1
+depend: [ Fastbuilder ]
+commands:
+  spawnAllFastbuilderMaps:
+    usage: /spawnAllFastbuilderMaps
+    description: Spawns all fastbuilder maps
+    permission: fastbuilder.spawnMaps
