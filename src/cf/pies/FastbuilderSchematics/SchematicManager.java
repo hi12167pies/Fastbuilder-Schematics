@@ -36,7 +36,8 @@ public class SchematicManager implements ArenaManager {
     public Location getEndIsland(String stringIdentifier) {
         FBIdentifier identifier = this.decodeIdentifier(stringIdentifier);
         // To make inclined on the left use + instead of - with inclinedValue
-        return identifier.data.spawn.clone().add((identifier.data.islandSpacing * identifier.id) - this.inclinedValue(identifier),
+        return identifier.data.spawn.clone().add(
+                (identifier.data.islandSpacing * identifier.id) - this.inclinedValue(identifier),
                 identifier.data.distanceUp,
                 identifier.data.startIslandLength + identifier.data.distance + identifier.data.zOffset);
     }
@@ -110,9 +111,7 @@ public class SchematicManager implements ArenaManager {
     public HashSet<String> cachedMaps = new HashSet<>();
     public FBIdentifier decodeIdentifier(String identifier) {
         if (cachedIdentifiers.containsKey(identifier)) return cachedIdentifiers.get(identifier);
-        System.out.println("DEBUG: " + identifier);
         String[] datas = identifier.split("-");
-        System.out.println("DEBUG: " + Arrays.asList(datas));
         FBIdentifier iden = new FBIdentifier();
         iden.mode = datas[0];
         iden.id = Integer.parseInt(datas[1]);
