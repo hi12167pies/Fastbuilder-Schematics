@@ -6,7 +6,6 @@ import cf.pies.FastbuilderSchematics.Data.ModeType;
 import org.bukkit.Location;
 import pies.FastbuilderAPI.Arena.ArenaManager;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class SchematicManager implements ArenaManager {
         FBIdentifier identifier = this.decodeIdentifier(stringIdentifier);
         // To make inclined on the left use + instead of - with inclinedValue
         return identifier.data.spawn.clone().add(
-                (identifier.data.islandSpacing * identifier.id) - this.inclinedValue(identifier),
+                (identifier.data.islandSpacing * -identifier.id) - this.inclinedValue(identifier),
                 identifier.data.distanceUp,
                 identifier.data.startIslandLength + identifier.data.distance + identifier.data.zOffset);
     }
@@ -46,14 +45,14 @@ public class SchematicManager implements ArenaManager {
     @Override
     public Location getpos1(String stringIdentifier) {
         FBIdentifier identifier = this.decodeIdentifier(stringIdentifier);
-        return identifier.data.pos1.clone().add(identifier.data.islandSpacing * identifier.id, 0, identifier.data.zOffset);
+        return identifier.data.pos1.clone().add(identifier.data.islandSpacing * -identifier.id, 0, identifier.data.zOffset);
     }
 
     @Override
     public Location getpos2(String stringIdentifier) {
         FBIdentifier identifier = this.decodeIdentifier(stringIdentifier);
         // To make inclined on the left use + instead of - with inclinedValue
-        return identifier.data.pos2.clone().add((identifier.data.islandSpacing * identifier.id) - this.inclinedValue(identifier),
+        return identifier.data.pos2.clone().add((identifier.data.islandSpacing * -identifier.id) - this.inclinedValue(identifier),
                 identifier.data.distanceUp,
                 identifier.data.startIslandLength + identifier.data.endIslandLength + identifier.data.distance + identifier.data.zOffset);
     }
@@ -61,7 +60,8 @@ public class SchematicManager implements ArenaManager {
     @Override
     public Location getSpawn(String stringIdentifier) {
         FBIdentifier identifier = this.decodeIdentifier(stringIdentifier);
-        Location loc = identifier.data.spawn.clone().add(identifier.data.islandSpacing * identifier.id, 0, identifier.data.zOffset);
+        Location loc = identifier.data.spawn.clone().add(
+                identifier.data.islandSpacing * -identifier.id, 0, identifier.data.zOffset);
         if (identifier.data.type == ModeType.INCLINED) {
             loc.setYaw(45);
         }
@@ -107,16 +107,16 @@ public class SchematicManager implements ArenaManager {
     @Override
     public void deleteMap(String identifier) {}
 
-    public HashMap<String, FBIdentifier> cachedIdentifiers = new HashMap<>();
     public HashSet<String> cachedMaps = new HashSet<>();
     public FBIdentifier decodeIdentifier(String identifier) {
-        if (cachedIdentifiers.containsKey(identifier)) return cachedIdentifiers.get(identifier);
         String[] datas = identifier.split("-");
+
         FBIdentifier iden = new FBIdentifier();
+
         iden.mode = datas[0];
         iden.id = Integer.parseInt(datas[1]);
         iden.data = this.getModeData(iden.mode);
-        cachedIdentifiers.put(identifier, iden);
+
         return iden;
     }
 }
