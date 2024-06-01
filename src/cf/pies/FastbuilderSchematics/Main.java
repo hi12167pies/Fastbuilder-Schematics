@@ -3,19 +3,20 @@ package cf.pies.FastbuilderSchematics;
 import cf.pies.FastbuilderSchematics.Data.ModeData;
 import cf.pies.FastbuilderSchematics.Data.ModeType;
 import cf.pies.FastbuilderSchematics.WorldEdit.FBSchematicHandler;
+import cf.pies.fastbuilder.api.FastbuilderAPI;
+import cf.pies.fastbuilder.api.FastbuilderProvider;
+import cf.pies.fastbuilder.api.events.PlayerJoinArenaEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import pies.FastbuilderAPI.EventManager.Events.PlayerJoinArenaEvent;
-import pies.FastbuilderAPI.EventManager.Events.PlayerLeaveArenaEvent;
-import pies.FastbuilderAPI.FastbuilderAPI;
-import pies.FastbuilderAPI.FastbuilderProvider;
 
 import java.util.HashMap;
 
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin implements Listener {
     public static SchematicManager arenaManager;
     public HashMap<String, FBSchematicHandler> spawnSchematic = new HashMap<>();
     public HashMap<String, FBSchematicHandler> endSchematic = new HashMap<>();
@@ -31,6 +32,8 @@ public class Main extends JavaPlugin {
     }
     @Override
     public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(this, this);
+
         this.saveDefaultConfig();
 
         SchematicManager.MAPS = this.getConfig().getInt("islands.maps");
@@ -96,15 +99,14 @@ public class Main extends JavaPlugin {
             commandSender.sendMessage("Done in " + end + "ms");
             return true;
         }));
+    }
 
-        api.getEventManager().listen(PlayerJoinArenaEvent.class, (ev) -> {
-            PlayerJoinArenaEvent event = (PlayerJoinArenaEvent) ev;
-
-            String mode = event.getArena().split("-")[0];
-            spawnSchematic.get(mode).load(arenaManager.getSpawn(event.getArena()));
-            if (SchematicManager.modeData.get(mode).type != ModeType.PARKOUR) {
-                endSchematic.get(mode).load(arenaManager.getEndIsland(event.getArena()));
-            }
-        });
+    @EventHandler
+    public void joinArena(PlayerJoinArenaEvent event) {
+        String mode = event.getArena().split("-")[0];
+        spawnSchematic.get(mode).load(arenaManager.getSpawn(event.getArena()));
+        if (SchematicManager.modeData.get(mode).type != ModeType.PARKOUR) {
+            endSchematic.get(mode).load(arenaManager.getEndIsland(event.getArena()));
+        }
     }
 }

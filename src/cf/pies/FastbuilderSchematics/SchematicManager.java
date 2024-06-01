@@ -3,8 +3,8 @@ package cf.pies.FastbuilderSchematics;
 import cf.pies.FastbuilderSchematics.Data.FBIdentifier;
 import cf.pies.FastbuilderSchematics.Data.ModeData;
 import cf.pies.FastbuilderSchematics.Data.ModeType;
+import cf.pies.fastbuilder.api.arena.ArenaManager;
 import org.bukkit.Location;
-import pies.FastbuilderAPI.Arena.ArenaManager;
 
 import java.util.HashMap;
 import java.util.HashSet;

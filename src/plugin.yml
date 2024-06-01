@@ -1,4 +1,4 @@
-name: FastbuilderSchematics
+name: Fastbuilder-Schematics
 main: cf.pies.FastbuilderSchematics.Main
 version: 1.1
 depend: [ Fastbuilder ]
